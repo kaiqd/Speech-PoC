@@ -1,35 +1,38 @@
 import SwiftUI
 import Speech
+import AVFoundation
 
-class ContentViewModel: ObservableObject {
+class AudioViewModel: ObservableObject {
     @Published var isRecording = false
-    @Published var transcription = "Pressione o botao e comece a falar"
+    @Published var transcription = "Pressione o botão e comece a falar "
     
     private let speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "pt-BR"))
     private let audioEngine = AVAudioEngine()
     private var request: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
     
-    // Request permission to use Speech and Microphone
+    // Solicitando o acesso ao microfone
     func requestAuthorization() {
         SFSpeechRecognizer.requestAuthorization { authStatus in
             switch authStatus {
             case .authorized:
                 print("Autorizado.")
             case .denied, .restricted, .notDetermined:
-                print("Reconhecimento de fala nao foi autorizado.")
+                print("Reconhecimento de fala não foi autorizado.")
             @unknown default:
-                fatalError("Status de autorizacao inesperado.")
+                fatalError("Status de autorização inesperado.")
             }
         }
         AVAudioSession.sharedInstance().requestRecordPermission { granted in
-            if !granted {
+            if granted {
+                print("Acesso ao microfone concedido.")
+            } else {
                 print("Acesso ao microfone negado.")
             }
         }
     }
     
-    // Start recording and recognizing speech
+    // Começar a gravar e reconhecer a fala
     func startRecording() {
         guard let speechRecognizer = speechRecognizer, speechRecognizer.isAvailable else { return }
         
@@ -60,11 +63,10 @@ class ContentViewModel: ObservableObject {
             try audioEngine.start()
             transcription = "Ouvindo..."
         } catch {
-            print("Mecanismo de audio nao pode ser iniciado: \(error.localizedDescription)")
+            print("Mecanismo de áudio não pode ser iniciado: \(error.localizedDescription)")
         }
     }
     
-    // Stop recording
     func stopRecording() {
         audioEngine.stop()
         audioEngine.inputNode.removeTap(onBus: 0)
@@ -72,40 +74,45 @@ class ContentViewModel: ObservableObject {
         request?.endAudio()
         recognitionTask?.cancel()
         
-        transcription = "gravacao interrompida."
+        transcription = "Gravação interrompida"
     }
-}
-
-struct ContentView: View {
-    @StateObject private var viewModel = ContentViewModel()
     
-    var body: some View {
-        VStack {
-            Text(viewModel.transcription)
-                .padding()
-                .multilineTextAlignment(.center)
+    func saveTranscriptionToFile(text: String) {
+        let fileName = "transcricao.txt"
+        if let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+            let fileURL = documentDirectory.appendingPathComponent(fileName)
             
-            Button(action: {
-                viewModel.isRecording.toggle()
-                if viewModel.isRecording {
-                    viewModel.startRecording()
+            do {
+                if FileManager.default.fileExists(atPath: fileURL.path) {
+                    let fileHandle = try FileHandle(forWritingTo: fileURL)
+                    fileHandle.seekToEndOfFile()
+                    if let data = "\n\(text)".data(using: .utf8) {
+                        fileHandle.write(data)
+                    }
+                    fileHandle.closeFile()
                 } else {
-                    viewModel.stopRecording()
+                    try text.write(to: fileURL, atomically: true, encoding: .utf8)
                 }
-            }) {
-                Image(systemName: viewModel.isRecording ? "mic.fill" : "mic.slash.fill")
-                    .imageScale(.large)
-                    .foregroundStyle(.tint)
-                    .padding()
+                print("Transcrição salva com sucesso!")
+            } catch {
+                print("Erro ao salvar a transcrição: \(error.localizedDescription)")
             }
         }
-        .padding()
-        .onAppear {
-            viewModel.requestAuthorization()
+    }
+    
+    func loadTranscriptionFromFile() -> String? {
+        let fileName = "transcricao.txt"
+        if let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+            let fileURL = documentDirectory.appendingPathComponent(fileName)
+            
+            do {
+                let savedText = try String(contentsOf: fileURL, encoding: .utf8)
+                return savedText
+            } catch {
+                print("Erro ao carregar a transcrição: \(error.localizedDescription)")
+                return nil
+            }
         }
+        return nil
     }
 }
-
-//#Preview {
-//    ContentView()
-//}

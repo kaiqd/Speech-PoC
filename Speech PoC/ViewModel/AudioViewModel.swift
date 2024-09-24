@@ -183,8 +183,10 @@ class AudioViewModel: ObservableObject {
             let rms = sqrt(channelDataValueArray.map { $0 * $0 }.reduce(0, +) / Float(buffer.frameLength))
             let avgPower = 20 * log10(rms)
             
+            let normalizedAudioLevel = max(0.0, min(1.0, (avgPower + 50) / 50))
+            
             DispatchQueue.main.async {
-                self.audioLevel = avgPower // Atualizando o nível de áudio
+                self.audioLevel = normalizedAudioLevel // Atualizando o nível de áudio
             }
         }
 

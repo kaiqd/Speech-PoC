@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6B6EC2622C8B273500BB6D5E /* AudioViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B6EC2612C8B273500BB6D5E /* AudioViewModel.swift */; };
+		6B7894512CA1AAF400F12362 /* RecordingAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7894502CA1AAF400F12362 /* RecordingAnimationView.swift */; };
 		6BC097F72C6B95E700E77D8F /* Speech_PoCApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC097F62C6B95E700E77D8F /* Speech_PoCApp.swift */; };
 		6BC097F92C6B95E700E77D8F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC097F82C6B95E700E77D8F /* ContentView.swift */; };
 		6BC097FB2C6B95E800E77D8F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6BC097FA2C6B95E800E77D8F /* Assets.xcassets */; };
@@ -16,6 +17,7 @@
 
 /* Begin PBXFileReference section */
 		6B6EC2612C8B273500BB6D5E /* AudioViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioViewModel.swift; sourceTree = "<group>"; };
+		6B7894502CA1AAF400F12362 /* RecordingAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingAnimationView.swift; sourceTree = "<group>"; };
 		6BC097F32C6B95E700E77D8F /* Speech PoC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Speech PoC.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6BC097F62C6B95E700E77D8F /* Speech_PoCApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Speech_PoCApp.swift; sourceTree = "<group>"; };
 		6BC097F82C6B95E700E77D8F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -38,6 +40,7 @@
 		6B0E684A2C8B37D90018EDCF /* View */ = {
 			isa = PBXGroup;
 			children = (
+				6B7894502CA1AAF400F12362 /* RecordingAnimationView.swift */,
 				6BC097F82C6B95E700E77D8F /* ContentView.swift */,
 			);
 			path = View;
@@ -161,6 +164,7 @@
 				6BC097F92C6B95E700E77D8F /* ContentView.swift in Sources */,
 				6B6EC2622C8B273500BB6D5E /* AudioViewModel.swift in Sources */,
 				6BC097F72C6B95E700E77D8F /* Speech_PoCApp.swift in Sources */,
+				6B7894512CA1AAF400F12362 /* RecordingAnimationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
